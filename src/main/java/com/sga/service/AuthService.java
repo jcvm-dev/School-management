@@ -1,8 +1,10 @@
 package com.sga.service;
 
+import com.sga.dto.AlterarSenhaRequest;
 import com.sga.dto.LoginRequest;
 import com.sga.dto.LoginResponse;
 import com.sga.entity.Usuario;
+import com.sga.exception.DuplicateResourceException;
 import com.sga.exception.ResourceNotFoundException;
 import com.sga.repository.UsuarioRepository;
 import com.sga.security.JwtTokenProvider;
@@ -43,7 +45,7 @@ public class AuthService {
             throw new ResourceNotFoundException("Usuário desativado");
         }
 
-        String token = jwtTokenProvider.generateToken(usuario.getId(), usuario.getEmail());
+        String token = jwtTokenProvider.generateToken(usuario.getId(), usuario.getEmail(), usuario.getTipo().name());
 
         return LoginResponse.builder()
                 .token(token)
@@ -51,6 +53,8 @@ public class AuthService {
                 .userId(usuario.getId())
                 .email(usuario.getEmail())
                 .nome(usuario.getNome())
+                .tipo(usuario.getTipo().name())
+                .senhaTemporaria(usuario.getSenhaTemporaria())
                 .expiresIn(86400000L) // 24 horas em milissegundos
                 .build();
     }
@@ -63,7 +67,7 @@ public class AuthService {
      */
     public Usuario registrar(Usuario usuario) {
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
-            throw new RuntimeException("Email já cadastrado");
+            throw new DuplicateResourceException("Email já cadastrado");
         }
 
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
@@ -82,5 +86,18 @@ public class AuthService {
     public Usuario obterUsuarioAutenticado(Long userId) {
         return usuarioRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com ID: " + userId));
+    }
+
+    public void alterarSenha(Long userId, AlterarSenhaRequest request) {
+        Usuario usuario = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+
+        if (!passwordEncoder.matches(request.getSenhaAtual(), usuario.getSenha())) {
+            throw new RuntimeException("Senha atual incorreta");
+        }
+
+        usuario.setSenha(passwordEncoder.encode(request.getNovaSenha()));
+        usuario.setSenhaTemporaria(false);
+        usuarioRepository.save(usuario);
     }
 }

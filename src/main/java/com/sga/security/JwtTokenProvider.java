@@ -31,7 +31,7 @@ public class JwtTokenProvider {
      * @param email email do usuário
      * @return token JWT gerado
      */
-    public String generateToken(Long userId, String email) {
+    public String generateToken(Long userId, String email, String tipo) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
@@ -40,6 +40,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(String.valueOf(userId))
                 .claim("email", email)
+                .claim("tipo", tipo)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS512)
@@ -95,6 +96,16 @@ public class JwtTokenProvider {
                 .parseSignedClaims(token)
                 .getPayload();
         return claims.get("email", String.class);
+    }
+
+    public String getTipoFromToken(String token) {
+        Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        Claims claims = Jwts.parser()
+                .verifyWith((javax.crypto.SecretKey) key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.get("tipo", String.class);
     }
 
     /**

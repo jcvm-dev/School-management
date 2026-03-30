@@ -92,14 +92,14 @@ mvn spring-boot:run
 
 A aplicação estará disponível em: `http://localhost:8080/api`
 
-## 📚 Documentação da API
+## Documentação da API
 
 A documentação interativa da API está disponível através do Swagger UI:
 
 - **Swagger UI**: [http://localhost:8080/api/swagger-ui.html](http://localhost:8080/api/swagger-ui.html)
 - **OpenAPI JSON**: [http://localhost:8080/api/v3/api-docs](http://localhost:8080/api/v3/api-docs)
 
-## 🔐 Autenticação
+## Autenticação
 
 A API utiliza autenticação baseada em **JWT (JSON Web Tokens)**. Para acessar endpoints protegidos:
 
@@ -135,7 +135,7 @@ curl -X GET http://localhost:8080/api/alunos \
   -H "Authorization: Bearer eyJhbGciOiJIUzUxMiJ9..."
 ```
 
-## 📡 Endpoints Principais
+## Endpoints Principais
 
 ### Autenticação
 - `POST /auth/login` - Login de usuário
@@ -191,7 +191,7 @@ curl -X GET http://localhost:8080/api/alunos \
 - `PUT /frequencias/{id}` - Atualizar frequência
 - `GET /frequencias/aluno/{alunoId}/turma/{turmaId}/taxa-presenca` - Taxa de presença
 
-## 📊 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 sga-backend/
@@ -212,7 +212,7 @@ sga-backend/
 └── README.md               # Este arquivo
 ```
 
-## 🔧 Configuração de Produção
+## Configuração de Produção
 
 ### 1. Alterar Chave JWT
 
@@ -247,7 +247,7 @@ Isso gera um arquivo JAR em `target/sga-backend-1.0.0.jar`
 java -jar target/sga-backend-1.0.0.jar
 ```
 
-## 🧪 Testes
+## Testes
 
 Execute os testes unitários:
 
@@ -255,7 +255,7 @@ Execute os testes unitários:
 mvn test
 ```
 
-## 📝 Exemplo de Uso Completo
+## Exemplo de Uso Completo
 
 ### 1. Registrar um novo usuário
 
