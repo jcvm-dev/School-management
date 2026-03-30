@@ -31,6 +31,12 @@ public class LoginResponse {
     @Schema(description = "Nome do usuário", example = "João Silva")
     private String nome;
 
+    @Schema(description = "Tipo do usuário", example = "ADMINISTRADOR")
+    private String tipo;
+
+    @Schema(description = "Indica se a senha é temporária e deve ser alterada", example = "false")
+    private Boolean senhaTemporaria;
+
     @Schema(description = "Tempo de expiração do token em milissegundos", example = "86400000")
     private Long expiresIn;
 }

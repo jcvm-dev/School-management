@@ -39,6 +39,9 @@ public class Usuario {
     @Column(nullable = false)
     private Boolean ativo = true;
 
+    @Column(name = "senha_temporaria", nullable = false, columnDefinition = "boolean not null default false")
+    private Boolean senhaTemporaria = false;
+
     @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 
